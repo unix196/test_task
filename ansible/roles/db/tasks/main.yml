@@ -1,0 +1,9 @@
+---
+
+- name: Install mariadb-server
+  apt:
+    pkg:
+      - "mariadb-server"
+    state: present
+    update_cache: yes
+  become: yes
