@@ -1,0 +1,15 @@
+---
+
+- name: Create user serviceuser
+  user:
+    name: serviceuser
+    comment: Account for manage systemd services
+    shell: /bin/bash
+  become: yes
+
+- name: Copy sudo file for serviceuser
+  copy:
+    src: serviceuser
+    dest: /etc/sudoers.d/serviceuser
+    mode: 440
+  become: yes

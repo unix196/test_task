@@ -28,4 +28,5 @@
   template:
     src: 50-server.cnf
     dest: /etc/mysql/mariadb.conf.d/
+  notify: restart mariadb
   become: yes
