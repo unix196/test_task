@@ -1,0 +1,64 @@
+---
+
+- name: Install mod_php and php extensions
+  apt:
+    pkg:
+      - "libapache2-mod-php"
+      - "php-curl"
+      - "php-gd"
+      - "php-mbstring"
+      - "php-mcrypt"
+      - "php-xml"
+      - "php-xmlrpc"
+      - "php-mysql"
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Copy apache2.conf
+  copy:
+    src: apache2.conf
+    dest: /etc/apache2/
+    mode: 644
+  notify: reload apache2
+  become: yes
+
+- name: Enable rewrite module
+  apache2_module:
+    state: present
+    name: rewrite
+  notify: reload apache2
+  become: yes
+
+- name: Copy wp.conf for apache2
+  template:
+    src: wp.conf
+    dest: /etc/apache2/sites-available
+  become: yes
+
+- name: Disable site 000-default
+  shell: a2dissite 000-default
+  notify: reload apache2
+  become: yes
+
+- name: Enable site wp
+  shell: a2ensite wp
+  notify: reload apache2
+  become: yes
+
+- name: Wget and un unarchive WordPress
+  unarchive:
+    remote_src: yes
+    src: https://ru.wordpress.org/latest-ru_RU.tar.gz
+    dest: /var/www
+    owner: www-data
+    group: www-data
+  become: yes
+
+- name: Copy wp-config.php
+  template:
+    src: wp-config.php
+    dest: /var/www/wordpress
+    owner: www-data
+    group: www-data
+  become: yes

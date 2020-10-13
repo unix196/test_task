@@ -1,10 +1,9 @@
 ---
 
-- name: Install apache2 and mod_php
+- name: Install apache2
   apt:
     pkg:
       - "apache2"
-      - "libapache2-mod-php"
     state: present
     update_cache: yes
   become: yes

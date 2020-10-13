@@ -1,9 +1,31 @@
 ---
 
-- name: Install mariadb-server
+- name: Install mariadb-server and python-mysqldb
   apt:
     pkg:
       - "mariadb-server"
+      - "python-mysqldb"
     state: present
     update_cache: yes
+  become: yes
+
+- name: Create database wp
+  mysql_db:
+    name: wp
+    state: present
+  become: yes
+
+- name: Create wp user
+  mysql_user:
+    name: wp_user
+    password: "karnaval_riO_111"
+    host: "192.168.33.10"
+    priv: "wp.*:ALL,GRANT"
+    state: present
+  become: yes
+
+- name: Copy 50-server.cnf for mariadb
+  template:
+    src: 50-server.cnf
+    dest: /etc/mysql/mariadb.conf.d/
   become: yes

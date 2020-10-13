@@ -1,5 +1,0 @@
----
-- hosts: web_sever
-
-  roles:
-    - role: apache2
